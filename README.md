@@ -2,6 +2,18 @@
 
 The source code used for self-supervised taxonomy completion method [TMN](), published in AAAI 21.
 
+Please cite the following work if you find the code useful.
+
+```
+@inproceedings{zhang2021tmn,
+	Author = {Zhang, Jieyu and Song, Xiangchen and Zeng, Ying and Chen, Jiaze and Shen, Jiaming and Mao, Yuning and Li, Lei},
+	Booktitle = {AAAI},
+	Title = {Taxonomy Completion via Triplet Matching Network},
+	Year = {2021}
+}	
+```
+Contact: Jieyu Zhang (jieyuz2@cs.washington.edu)
+
 ## Install Guide
 
 ### Install DGL 0.4.0 version with GPU suppert using Conda
