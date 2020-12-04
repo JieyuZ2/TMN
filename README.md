@@ -1,6 +1,6 @@
 # Triplet Matching Network
 
-The source code used for self-supervised taxonomy completion method [TMN](), published in .
+The source code used for self-supervised taxonomy completion method [TMN](), published in AAAI 21.
 
 ## Install Guide
 
