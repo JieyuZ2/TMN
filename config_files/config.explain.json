@@ -1,0 +1,75 @@
+{
+    "name": "str. name of this model, can be any string",
+    "n_gpu": "int. how many gpus to use",
+    "data_path": "str. the path of binary data file",
+    "mode": "str, combination of r,p,g. indicates which feature encoder to use, eg, r means initial feature vector, rg means initial feature vectors + GNN",
+    "arch": {
+        "type": "str. name of model, MatchModel for all methods, could be other if new model is implemented in model/model.py",
+        "trainer": "str. name of trainer, TrainerS for one-to-one matching methods, TrainerT for TMN, could be other if new trainer is implemented in trainer/trainer.py",
+        "args": {
+            "propagation_method": "str. propogation method for GNN, could be PGAT, PGCN, GAT, GCN",
+            "readout_method": "str. readout method for GNN, could be MR, WMR",
+            "matching_method": "str. matching method, could be MLP, SLP, DST, LBM, BIM, Arborist, NTN, CNTN, TMN",
+            "k": "int. dimension of internal feature representation as in paper",
+            "in_dim": "int. dimension of initial feature vector",
+            "hidden_dim": "int. hidden dimension",
+            "out_dim": "int. dimension of output vector",
+            "pos_dim": "int. dimension of position embedding",
+            "num_layers": "int. number of layers of GNN",
+            "heads": "int. number of attention heads for GNN",
+            "feat_drop": "float (0-1). drop rate of initial feature vector for GNN",
+            "attn_drop": "float (0-1). drop rate of attention for GNN",
+            "hidden_drop": "float (0-1). drop rate of hidden layer for GNN",
+            "out_drop": "float (0-1). drop rate of output vector for GNN"
+        }
+    },
+    "train_data_loader": {
+        "type": "str. UnifiedDataLoader for taxonomy completion, TaxoExpanDataLoader for taxonomy expansion, could be other if new dataloader is implemented in data_loader/data_loader.py",
+        "args":{
+            "sampling_mode": "int. 1 for training, 0 for inference",
+            "batch_size": "int.",
+            "negative_size": "int.",
+            "max_pos_size": "int. max positive positions for training",
+            "expand_factor": "int. number of neighbors to collect for GNN",
+            "shuffle": "bool.",
+            "num_workers": "int. number of workers for dataloaders",
+            "cache_refresh_time": "int. refreash time for cache of GNN",
+            "normalize_embed": "bool. whether to normalize initial feature vector"
+        }
+    },
+    "optimizer": {
+        "type": "Adam",
+        "args":{
+            "lr": 0.001,
+            "weight_decay": 0,
+            "amsgrad": true
+        }
+    },
+    "loss": "str. default is bce_loss, check out model/loss/py",
+    "metrics": [
+        "macro_mr", "micro_mr", "hit_at_1", "hit_at_5", "hit_at_10", "precision_at_1", "precision_at_5", "precision_at_10", "mrr_scaled_10"
+    ],
+    "lr_scheduler": {
+        "type": "ReduceLROnPlateau",
+        "args": {
+            "mode": "min",
+            "factor": 0.5,
+            "patience": 10,
+            "verbose": true
+        }
+    },
+    "trainer": {
+        "epochs": "int. number of epochs",
+        "test_batch_size": "int. batch size for testing/validation phase in training, could be very large if you GPU memory is large enough",
+
+        "save_dir": "str. dir path to save check point",
+        "save_period": "int. interval of epochs to save model",
+        "verbosity": "int. verbosity of logger, default is 2",
+        
+        "monitor": "str str. used for early stop and lr_scheduler. two strings seperated by space. 1st str indicates criterion, 2nd indicates the metric. default is min val_macro_mr. which means val_macro_mr is used in early stop, and min is better",
+        "early_stop": "int. early stop patience, default is 10",
+        "grad_clip": -1,
+
+        "tensorboardX": true
+    }
+}

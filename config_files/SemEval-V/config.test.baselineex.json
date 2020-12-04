@@ -1,0 +1,75 @@
+{
+    "name": "ExpanMatchModel",
+    "n_gpu": 1,
+    "data_path": "data/SemEval-Verb/wordnet_verb.fasttext_mode4.pickle.bin",
+    "mode": "r",
+    "arch": {
+        "type": "ExpanMatchModel",
+        "trainer": "TrainerExpan",
+        "args": {
+            "propagation_method": "PGAT",
+            "readout_method": "WMR",
+            "matching_method": "BIM",
+            "k": 5,
+            "in_dim": 300,
+            "hidden_dim": 100,
+            "out_dim": 300,
+            "pos_dim": 50,
+            "num_layers": 1,
+            "heads": [4, 1],
+            "feat_drop": 0.1, 
+            "attn_drop": 0.1,
+            "hidden_drop": 0.1,
+            "out_drop": 0.1
+        }
+    },
+    "train_data_loader": {
+        "type": "TaxoExpanDataLoader",
+        "args":{
+            "sampling_mode": 1,
+            "batch_size": 128,
+            "negative_size": 31,
+            "max_pos_size": 100,
+            "expand_factor": 40,
+            "shuffle": true,
+            "num_workers": 0,
+            "cache_refresh_time": 64,
+            "normalize_embed": true
+        }
+    },
+    "optimizer": {
+        "type": "Adam",
+        "args":{
+            "lr": 0.001,
+            "weight_decay": 0,
+            "amsgrad": true
+        }
+    },
+    "loss": "bce_loss",
+    "metrics": [
+        "macro_mr", "micro_mr", "hit_at_1", "hit_at_5", "hit_at_10", "precision_at_1", "precision_at_5", "precision_at_10", "mrr_scaled_10"
+    ],
+    "lr_scheduler": {
+        "type": "ReduceLROnPlateau",
+        "args": {
+            "mode": "min",
+            "factor": 0.5,
+            "patience": 10,
+            "verbose": true
+        }
+    },
+    "trainer": {
+        "epochs": 100,
+        "test_batch_size": 4096,
+
+        "save_dir": "data/saved/Verb/",
+        "save_period": 20,
+        "verbosity": 2,
+        
+        "monitor": "min val_macro_mr",
+        "early_stop": 10,
+        "grad_clip": -1,
+
+        "tensorboardX": true
+    }
+}
